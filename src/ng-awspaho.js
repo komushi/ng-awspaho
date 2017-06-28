@@ -38,7 +38,7 @@
         var iotSignUtil = AWSIoTSign.getUtil(region, endpoint, credentials)
 
         var promise = $q(function(resolve, reject) {
-          iotSignUtil.getSignedUrl(15, (err, url) => {
+          iotSignUtil.getSignedUrl(15, function (err, url){
               if (!err) {
                 resolve(url);
               } else {
