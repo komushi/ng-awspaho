@@ -1,6 +1,109 @@
+# ng-awspaho
 # AWS IoT Service Paho Client Library for AngularJS
 
-## How to use
+----
+
+## 1. Installation
+### Install via Bower:
+```bash
+$ bower install ng-awspaho
+```
+
+## 2. Usages
+### 2-1. Add dependencies to your HTML file
+```html
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/aws-iot-sign/lib/aws-iot-sign.js"></script>
+<script src="bower_components/paho-mqtt/src/mqttws31.js"></script>
+<script src="bower_components/ng-awspaho/src/ng-awspaho.js"></script>
+```
+
+### 2-2. Declare ng-awsmqtt as a dependency in your application
+```
+var app =  angular.module('your-app', ['ng-awspaho']);
+```
+
+### 2-3. Inject in your controller
+```
+app.controller('your-controller', ['$scope', '$paho', function($scope, $paho){
+    ...
+}
+```
+
+### 2-4. Available Methods
+#### 2-4-1. Connect to an endpoint
+```
+// Credentials
+AWS.config.region = 'ap-northeast-1';
+const credentials = new AWS.CognitoIdentityCredentials({
+  IdentityPoolId: 'ap-northeast-1:b0ea8e9d-0401-434f-a295-2b201efdfb97'
+});
+
+// Connect
+$paho.connect('my-connection-to-endpoint1', 'ap-northeast-1', 'a2sdpyfw66qrvw.iot.ap-northeast-1.amazonaws.com', credentials)
+  .then(function(payload) {
+    console.log(JSON.stringify(payload));
+  }, function(payload) {
+    console.error(JSON.stringify(payload));
+  });
+```
+
+#### 2-4-2. Disconnect from an endpoint - TODO
+```
+$mqtt.disconnect('my-connection-to-endpoint1',).then(
+    function () {
+        console.log('Disconnected');
+    });   
+```
+
+#### 2-4-3. Subscribe to a topic
+```
+$mqtt.subscribe('my-connection-to-endpoint1', 'iotbutton/001')
+    .then(function (message) {
+        // when receive a message
+        console.log(JSON.stringify(message));
+    })
+    .catch(function (err) {
+        // error handling
+        console.error(err);
+    });
+
+// Subscribe a topic
+$paho.subscribe('my-connection-to-endpoint1', 'iotbutton/001', 1)
+  .then(function(payload) {
+    console.log(JSON.stringify(payload));
+    $paho.received('my-connection-to-endpoint1')
+      .then(null,null, function(payload){
+        console.log(payload.message.payloadString);
+      });
+  }, function(payload) {
+      console.error(JSON.stringify(payload));
+  });
+```
+
+#### 2-4-4. Unsubscribe from a topic - TODO
+```
+$mqtt.unsubscribe($scope.awsMqtt.name, $scope.awsMqtt.subdest)
+    .then(function (message) {
+        // unsubscribe result
+        console.log(JSON.stringify(message));
+    })
+    .catch(function (err) {
+        // error handling
+        console.error(err);
+    });
+```
+
+#### 2-4-5. Send message to a topic - TODO
+```
+$mqtt.send('my-connection-to-endpoint1', 
+    'iotbutton/002', 
+    'my-payload-text');
+```
+
+----
+
+## Example
 ```
 var app =  angular.module('ngPahoExample', ['ng-awspaho']);
 

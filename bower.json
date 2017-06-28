@@ -1,0 +1,30 @@
+{
+  "name": "ng-awspaho",
+  "version": "0.0.1",
+  "description": "AWS IoT Service Paho Client Library for AngularJS",
+  "homepage": "https://github.com/komushi/ng-awspaho",
+  "authors": [
+    "Lei Xu <komushi@gmail.com>"
+  ],
+  "main": "src/ng-awspaho.js",
+  "keywords": [
+    "aws",
+    "IoT",
+    "MQTT",
+    "paho",
+    "Websocket"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paho-mqtt": "*",
+    "aws-iot-sign": "^0.0.1",
+    "angular": "^1.6.4"
+  }
+}
