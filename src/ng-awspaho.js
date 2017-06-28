@@ -108,6 +108,23 @@
 
         return dfd.promise
       }
+
+
+      this.send = function (name, topic, body) {
+        var dfd = $q.defer()
+        try {
+
+          var message = new Paho.MQTT.Message(body)
+          message.destinationName = topic
+          pahoClients[name].send(message)
+
+          dfd.resolve()
+          
+        } catch (e) {
+          dfd.reject(e)
+        }
+        return dfd.promise
+      }
 /*
       this.disconnect = function (name) {
         var dfd = $q.defer()
