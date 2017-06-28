@@ -1,7 +1,7 @@
 /**
  * ng-awspaho
  *
- * @version 0.1.2
+ * @version 0.0.1
  * @author Lei Xu <komushi@gmail.com>
  * @license MIT
  */
