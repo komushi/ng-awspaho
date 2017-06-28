@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Angular AWS MQTT Demo</title>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+
+		<!-- <base href="/"> -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
+		<!-- aws-sdk -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.48.0/aws-sdk.min.js"></script>
+		<!-- paho -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+		<!-- aws-iot-sign -->
+		<script src="https://rawgit.com/komushi/aws-iot-sign/master/lib/aws-iot-sign.js"></script>
+		<!-- ng-awspaho -->
+		<script src="https://rawgit.com/komushi/ng-awspaho/master/src/ng-awspaho.js"></script>
+		<!-- <script src="./ng-awspaho.js"></script> -->
+
+	</head>
+
+	<body ng-app="ngPahoExample">
+
+<script>
+var app =  angular.module('ngPahoExample', ['ng-awspaho']);
+
+app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
+
+	// Connect
+    $scope.connect = function () {
+    	$paho.connect($scope.awsMqtt.name, $scope.awsMqtt.region, $scope.awsMqtt.endpoint, $scope.awsMqtt.credentials)
+				.then(function(payload) {
+				  console.log(JSON.stringify(payload));
+				}, function(payload) {
+					console.error(JSON.stringify(payload));
+				});
+    };
+
+    // Disconnect
+    $scope.disconnect = function () {
+      $paho.disconnect($scope.awsMqtt.name).then(
+          function () {
+              console.log('Disconnected');
+          });        
+    };
+    
+    // Subscribe a topic
+    $scope.subscribe = function () {
+      $paho.subscribe($scope.awsMqtt.name, $scope.awsMqtt.topic, 1)
+				.then(function(payload) {
+				  // console.log(payload.topic, payload.invocationContext)
+				  console.log(JSON.stringify(payload));
+				  $paho.received($scope.awsMqtt.name)
+				  	.then(null,null,showResponse);
+				}, function(payload) {
+					console.error(JSON.stringify(payload));
+				  // console.error(payload.topic, payload.invocationContext, payload.errorCode, payload.errorMessage)
+				});
+    };
+
+
+    // Unsubscribe a topic
+    $scope.unsubscribe = function () {
+        $paho.unsubscribe($scope.awsMqtt.name, $scope.awsMqtt.topic)
+            .then(function (message) {
+            	console.log(JSON.stringify(message));
+            })
+            .catch(function (err) {
+				console.error(err);
+            });
+    };
+
+    // Send a message
+    $scope.send = function () {
+
+  		// use JSON.parse($scope.awsMqtt.payload) to send JSON string
+      $paho.send($scope.awsMqtt.name, $scope.awsMqtt.topic, $scope.awsMqtt.payload);
+    };
+
+    // notify callback function
+    var showResponse = function (payload) {
+        console.log(payload.message.payloadString);
+
+        $scope.rows.push({message : payload.message.payloadString });
+    };
+
+    var initialize = function () {
+        $scope.awsMqtt = {}
+
+        $scope.awsMqtt.region = 'ap-northeast-1';
+        $scope.awsMqtt.endpoint = 'a2sdpyfw66qrvw.iot.ap-northeast-1.amazonaws.com';
+    //     $scope.awsMqtt.credentials = 
+				// {
+				// 	accessKeyId: '<your_key>', 
+				// 	secretAccessKey: '<your_secret>',
+				// 	get: (callback) =>  {
+				// 	  callback();
+				// 	}
+				// };
+				$scope.awsMqtt.identityPoolId = 'ap-northeast-1:b0ea8e9d-0401-434f-a295-2b201efdfb97';
+				AWS.config.region = $scope.awsMqtt.region;
+				$scope.awsMqtt.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: $scope.awsMqtt.identityPoolId});
+        $scope.awsMqtt.topic = 'iotbutton/001';
+        $scope.awsMqtt.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
+        $scope.awsMqtt.headers = '{}';
+        $scope.awsMqtt.name = 'aws_iot_mqtt_test';
+
+        $scope.rows = [];
+    };
+
+    initialize();
+
+}]);
+</script>
+
+		<div class="container-fluid" ng-controller="mqttController">
+			<div class="row">
+			  <div class="col-md-3">
+			    <div class="panel panel-default">
+			      <div class="panel-body">
+			   	    <div class="form-group">
+			          <label for="endpoint">Endpoint URL:</label>
+			          <input type="text" class="form-control" id="endpoint" placeholder="endpointid.iot.region.amazonaws.com" ng-model="awsMqtt.endpoint">
+			          <label for="endpoint">Cognito Identity Pool ID:</label>
+			          <input type="text" class="form-control" id="identityPoolId" placeholder="region:identityPoolId" ng-model="awsMqtt.identityPoolId">
+<!-- 			          <label for="accessKeyId">accessKeyId:</label>
+			          <input type="text" class="form-control" id="accessKeyId" placeholder='AccessKeyId' ng-model="awsMqtt.accessKeyId">
+			          <label for="secretAccessKey">secretAccessKey:</label>
+			          <input type="password" class="form-control" id="secretAccessKey" placeholder='SecretAccessKey' ng-model="awsMqtt.secretAccessKey">
+ -->					    </div>
+			        <div class="form-group">
+			          <button ng-click="connect()">Connect</button>
+			          <button ng-click="disconnect()">Disconnect</button>
+			        </div>
+			      </div>      
+			    </div>
+			    <div class="panel panel-default">
+			      <div class="panel-body">
+			        <div class="form-group">
+			          <label for="queue">Pub Topic</label>
+			          <input type="text" class="form-control" id="topic" placeholder='/topic' ng-model="awsMqtt.topic">
+			          <label for="body">Body</label>
+			          <textarea class="form-control" rows="2" id="payload" placeholder='{"key":"value"}' ng-model="awsMqtt.payload"></textarea>
+			        </div>
+			        <div class="form-group">
+			          <button ng-click="subscribe()">Subscribe</button>
+			          <button ng-click="unsubscribe()">Unsubscribe</button>
+			          <button ng-click="send()">Publish</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="col-md-9">
+			    <div class="panel panel-default">
+			      <div class="panel-body">
+							<table class="table">
+							  	<thead> 
+							  		<tr> <th>Topic</th> <th>Message</th> </tr> 
+						  		</thead>
+							  	<tbody> 
+									  <tr ng-repeat="row in rows">
+									    <td>{{ row.topic }}</td>
+									    <td>{{ row.message }}</td>
+									  </tr>
+						  		</tbody> 
+							</table>
+			      </div>
+	      	</div>
+      	</div>
+			</div>
+		</div>
+
+	</body>
+</html>
