@@ -89,7 +89,7 @@
             dfd.reject('Not connected to AWS IoT MQTT Broker.');  
           }
         } else {
-          dfd.reject(`Paho Client with the name of ${name} does not exist`);
+          dfd.reject('Paho Client does not exist: ' + name);
         }
 
         return dfd.promise
