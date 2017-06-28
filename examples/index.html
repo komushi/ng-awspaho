@@ -96,9 +96,10 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
 				// 	  callback();
 				// 	}
 				// };
-				$scope.awsMqtt.identityPoolId = 'ap-northeast-1:b0ea8e9d-0401-434f-a295-2b201efdfb97';
-				AWS.config.region = $scope.awsMqtt.region;
-				$scope.awsMqtt.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: $scope.awsMqtt.identityPoolId});
+		$scope.awsMqtt.identityPoolId = 'ap-northeast-1:b0ea8e9d-0401-434f-a295-2b201efdfb97';
+		AWS.config.region = $scope.awsMqtt.region;
+		$scope.awsMqtt.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: $scope.awsMqtt.identityPoolId});
+		
         $scope.awsMqtt.topic = 'iotbutton/001';
         $scope.awsMqtt.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
         $scope.awsMqtt.headers = '{}';
