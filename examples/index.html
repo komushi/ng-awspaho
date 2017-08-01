@@ -10,6 +10,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.48.0/aws-sdk.min.js"></script>
 		<!-- paho -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+		
+		<!-- <script src="https://raw.githack.com/eclipse/paho.mqtt.javascript/master/src/paho-mqtt.js" type="text/javascript"></script> -->
 		<!-- aws-iot-sign -->
 		<script type="application/javascript" src="https://cdn.rawgit.com/komushi/aws-iot-sign/master/lib/aws-iot-sign.js"></script>
 		<!-- ng-awspaho -->
@@ -30,6 +32,9 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
     	$paho.connect($scope.awsMqtt.name, $scope.awsMqtt.region, $scope.awsMqtt.endpoint, $scope.awsMqtt.credentials)
 				.then(function(payload) {
 				  console.log(JSON.stringify(payload));
+				  $paho.received($scope.awsMqtt.name)
+				  	.then(null,null,showResponse);
+
 				}, function(payload) {
 					console.error(JSON.stringify(payload));
 				});
@@ -49,8 +54,6 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
 				.then(function(payload) {
 				  // console.log(payload.topic, payload.invocationContext)
 				  console.log(JSON.stringify(payload));
-				  $paho.received($scope.awsMqtt.name)
-				  	.then(null,null,showResponse);
 				}, function(payload) {
 					console.error(JSON.stringify(payload));
 				  // console.error(payload.topic, payload.invocationContext, payload.errorCode, payload.errorMessage)

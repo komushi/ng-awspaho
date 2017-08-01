@@ -1,0 +1,30 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create EC2Instance Resources
+
+Parameters:
+  IdentityPoolName:
+    Description: IdentityPool Name
+    Default: iotIdentityPool
+    Type: String
+
+Resources:
+  IdentityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: !Ref IdentityPoolName
+      AllowUnauthenticatedIdentities: True
+  RoleAttachment:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId:
+        Ref: IdentityPool
+      Roles:
+        unauthenticated:
+          Fn::GetAtt:
+          - UnauthenticatedRole
+          - Arn
+        authenticated:
+          Fn::GetAtt:
+          - AuthenticatedRole
+          - Arn
