@@ -36,11 +36,11 @@ app.controller('your-controller', ['$scope', '$paho', function($scope, $paho){
 // Credentials
 AWS.config.region = 'ap-northeast-1';
 const credentials = new AWS.CognitoIdentityCredentials({
-  IdentityPoolId: 'ap-northeast-1:b0ea8e9d-0401-434f-a295-2b201efdfb97'
+  IdentityPoolId: 'ap-northeast-1:<identity_pool_id>'
 });
 
 // Connect
-$paho.connect('my-connection-to-endpoint1', 'ap-northeast-1', 'a2sdpyfw66qrvw.iot.ap-northeast-1.amazonaws.com', credentials)
+$paho.connect('my-connection-to-endpoint1', 'ap-northeast-1', '<iot_endpoint>.iot.ap-northeast-1.amazonaws.com', credentials)
   .then(function(payload) {
     console.log(JSON.stringify(payload));
   }, function(payload) {
@@ -167,8 +167,8 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
       $scope.awsMqtt = {}
 
       $scope.awsMqtt.region = 'ap-northeast-1';
-      $scope.awsMqtt.endpoint = 'a2sdpyfw66qrvw.iot.ap-northeast-1.amazonaws.com';
-      $scope.awsMqtt.identityPoolId = 'ap-northeast-1:b0ea8e9d-0401-434f-a295-2b201efdfb97';
+      $scope.awsMqtt.endpoint = '<iot_endpoint>.iot.ap-northeast-1.amazonaws.com';
+      $scope.awsMqtt.identityPoolId = 'ap-northeast-1:<identity_pool_id>';
       AWS.config.region = $scope.awsMqtt.region;
       $scope.awsMqtt.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: $scope.awsMqtt.identityPoolId});
       $scope.awsMqtt.topic = 'iotbutton/001';
