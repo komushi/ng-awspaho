@@ -119,6 +119,14 @@
           }
         }
       }
+
+      this.getClientId = function (name) {
+        if (pahoClients[name]) {
+          if (pahoClients[name].isConnected()){
+            return pahoClients[name].clientId
+          }
+        }
+      }
 /*
       this.disconnect = function (name) {
         var dfd = $q.defer()

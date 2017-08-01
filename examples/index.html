@@ -15,7 +15,7 @@
 		<!-- aws-iot-sign -->
 		<script type="application/javascript" src="https://cdn.rawgit.com/komushi/aws-iot-sign/master/lib/aws-iot-sign.js"></script>
 		<!-- ng-awspaho -->
-		<script type="application/javascript" src="https://rawgit.com/komushi/ng-awspaho/master/src/ng-awspaho.js"></script>
+		<script type="application/javascript" src="https://cdn.rawgit.com/komushi/ng-awspaho/master/src/ng-awspaho.js"></script>
 		<!-- <script src="./ng-awspaho.js"></script> -->
 
 	</head>
@@ -32,6 +32,7 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
     	$paho.connect($scope.awsMqtt.name, $scope.awsMqtt.region, $scope.awsMqtt.endpoint, $scope.awsMqtt.credentials)
 				.then(function(payload) {
 				  console.log(JSON.stringify(payload));
+				  console.log($paho.getClientId($scope.awsMqtt.name));
 				  $paho.received($scope.awsMqtt.name)
 				  	.then(null,null,showResponse);
 
