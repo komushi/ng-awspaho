@@ -111,19 +111,13 @@
 
 
       this.send = function (name, topic, body) {
-        var dfd = $q.defer()
-        try {
-
-          var message = new Paho.MQTT.Message(body)
-          message.destinationName = topic
-          pahoClients[name].send(message)
-
-          dfd.resolve()
-          
-        } catch (e) {
-          dfd.reject(e)
+        if (pahoClients[name]) {
+          if (pahoClients[name].isConnected()){
+            var message = new Paho.MQTT.Message(body)
+            message.destinationName = topic
+            pahoClients[name].send(message)
+          }
         }
-        return dfd.promise
       }
 /*
       this.disconnect = function (name) {
@@ -155,22 +149,6 @@
       }
 
 
-
-
-      this.send = function (name, topic, body) {
-        var dfd = $q.defer()
-        try {
-          var payloadJson = JSON.stringify(body)
-
-          pahoClients[name].publish(topic, payloadJson)
-
-          dfd.resolve()
-          
-        } catch (e) {
-          dfd.reject(e)
-        }
-        return dfd.promise
-      }
 
 */
     }]
