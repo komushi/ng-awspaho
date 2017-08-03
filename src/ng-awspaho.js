@@ -48,7 +48,7 @@
         })
 
         promise.then(function(url) {
-          pahoClients[name] = new Paho.MQTT.Client(url, 'mqtt-client-' + (Math.floor((Math.random() * 100000) + 1)))  
+          pahoClients[name] = new Paho.MQTT.Client(url, name + '-' + (Math.floor((Math.random() * 100000) + 1)))  
 
           var connectOptions = {
               onSuccess: function(invocationContext){

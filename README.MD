@@ -34,13 +34,13 @@ app.controller('your-controller', ['$scope', '$paho', function($scope, $paho){
 #### 2-4-1. Connect to an endpoint
 ```
 // Credentials
-AWS.config.region = 'ap-northeast-1';
+AWS.config.region = '<region>';
 const credentials = new AWS.CognitoIdentityCredentials({
-  IdentityPoolId: 'ap-northeast-1:<identity_pool_id>'
+  IdentityPoolId: '<region>:<identity_pool_id>'
 });
 
 // Connect
-$paho.connect('my-connection-to-endpoint1', 'ap-northeast-1', '<iot_endpoint>.iot.ap-northeast-1.amazonaws.com', credentials)
+$paho.connect('my-connection-to-endpoint1', '<region>', '<iot_endpoint>.iot.<region>.amazonaws.com', credentials)
   .then(function(payload) {
     console.log(JSON.stringify(payload));
   }, function(payload) {
@@ -166,9 +166,9 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
     var initialize = function () {
       $scope.awsMqtt = {}
 
-      $scope.awsMqtt.region = 'ap-northeast-1';
-      $scope.awsMqtt.endpoint = '<iot_endpoint>.iot.ap-northeast-1.amazonaws.com';
-      $scope.awsMqtt.identityPoolId = 'ap-northeast-1:<identity_pool_id>';
+      $scope.awsMqtt.region = '<region>';
+      $scope.awsMqtt.endpoint = '<iot_endpoint>.iot.<region>.amazonaws.com';
+      $scope.awsMqtt.identityPoolId = '<region>:<identity_pool_id>';
       AWS.config.region = $scope.awsMqtt.region;
       $scope.awsMqtt.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: $scope.awsMqtt.identityPoolId});
       $scope.awsMqtt.topic = 'iotbutton/001';
@@ -180,7 +180,6 @@ app.controller('mqttController', ['$scope', '$paho', function($scope, $paho){
 }]);
 ```
 
-## TODO
+## TODO: implement the following
 * $paho.disconnect
 * $paho.unsubscribe
-* $paho.send

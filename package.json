@@ -1,6 +1,6 @@
 {
   "name": "ng-awspaho",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "AWS IoT Service Paho Client Library for AngularJS",
   "main": "index.js",
   "scripts": {
